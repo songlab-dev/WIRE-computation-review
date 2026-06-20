@@ -1,4 +1,4 @@
-# Reproducibility Code
+# Generalized Additive Models
 
 Code to reproduce the simulation and benchmark results from the paper for GAM section.
 
@@ -11,12 +11,12 @@ All scripts read/write relative to the **project root** (`data/`, `results/`).
 Rscript public/install_packages.R
 ```
 
-**Python packages**:
+**Python packages** (statsmodel, pyGAM)
 ```bash
 pip install -r public/requirements.txt
 ```
 
-## Reproducing the accuracy table (`accuracy_summary.tex`)
+## Accuracy comparison
 
 Run from the project root:
 
@@ -35,7 +35,7 @@ python  public/simulate_logistic_python.py
 python public/make_accuracy_table.py
 ```
 
-## Reproducing the scalability table (`table_scalability.tex`)
+## Scalability comparison
 
 ```bash
 # Run R and Python benchmarks (can run in parallel; each checkpoints per rep)
