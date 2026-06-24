@@ -172,7 +172,7 @@ for task in ("global", "local"):
         df.reset_index().to_csv(out, index=False)
 
 print("\n=== additive ===")
-for p in (1, 3, 5, 10):
+for p in (1, 10, 50, 100):
     subtask = f"additive_p{p:02d}"
     for n in (100, 500, 2000):
         out = f"{RESULTS}/python_{subtask}_n{n}.csv"

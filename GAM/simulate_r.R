@@ -151,7 +151,7 @@ for (task in c("global", "local")) {
 }
 
 cat("\n=== additive ===\n")
-for (p in c(1, 3, 5, 10)) {
+for (p in c(1, 10, 50, 100)) {
   subtask <- sprintf("additive_p%02d", p)
   for (n in c(100, 500, 2000)) {
     out <- sprintf("%s/r_%s_n%d.csv", RESULTS, subtask, n)

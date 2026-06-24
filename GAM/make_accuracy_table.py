@@ -7,7 +7,7 @@ Gaussian columns : relative MISE (global), relative MISE (local),
                    coverage (global), coverage (local)
 Logistic columns : relative MISE on linear predictor (global/local),
                    coverage (global/local)
-Additive GAM     : relative MISE (p=1, 5, 10), coverage (p=1, 5, 10)
+Additive GAM     : relative MISE (p values discovered from data; p=5 excluded)
 
 MISE is reported relative to gam_cr_gcv at n = 500.
 Bold marks the unique best method within each basis group × column.
@@ -115,11 +115,29 @@ global_df       = _filter_n(load_task("global"))
 local_df        = _filter_n(load_task("local"))
 logi_global_df  = _filter_n(load_task("logistic_global"))
 logi_local_df   = _filter_n(load_task("logistic_local"))
-additive_p01_df = _filter_n(load_task("additive_p01"))
-additive_p05_df = _filter_n(load_task("additive_p05"))
-additive_p10_df = _filter_n(load_task("additive_p10"))
+def _discover_ps() -> list[int]:
+    """Discover additive p values present in results; mirrors _discover() in
+    code/make_benchmark_table.py.  p=5 is excluded to keep the table compact."""
+    ps = set()
+    for f in RESULTS_DIR.glob("*.csv"):
+        if "benchmark" in f.name:
+            continue
+        try:
+            df = pd.read_csv(f)
+        except Exception:
+            continue
+        if "task" not in df.columns:
+            continue
+        for task in df["task"].dropna().unique():
+            m = re.match(r"additive_p(\d+)$", str(task))
+            if m:
+                ps.add(int(m.group(1)))
+    return [p for p in sorted(ps) if p != 5]   # omit p=5 (matches benchmark table)
 
-if global_df.empty and local_df.empty and additive_p01_df.empty:
+ADD_PS = _discover_ps()
+additive_dfs = {p: _filter_n(load_task(f"additive_p{p:02d}")) for p in ADD_PS}
+
+if global_df.empty and local_df.empty and not additive_dfs:
     print("No simulation data found — run simulations first.")
     raise SystemExit(1)
 
@@ -138,19 +156,14 @@ tbl = pd.DataFrame({
     "l_mise_local":   [_rel(logi_local_df).get(m, nan)  for m in ALL_METHODS],
     "l_cov_global":   [_cov(logi_global_df).get(m, nan) for m in ALL_METHODS],
     "l_cov_local":    [_cov(logi_local_df).get(m, nan)  for m in ALL_METHODS],
-    # Additive GAM
-    "a_mise_p01":     [_rel(additive_p01_df).get(m, nan) for m in ALL_METHODS],
-    "a_mise_p05":     [_rel(additive_p05_df).get(m, nan) for m in ALL_METHODS],
-    "a_mise_p10":     [_rel(additive_p10_df).get(m, nan) for m in ALL_METHODS],
-    "a_cov_p01":      [_cov(additive_p01_df).get(m, nan)  for m in ALL_METHODS],
-    "a_cov_p05":      [_cov(additive_p05_df).get(m, nan)  for m in ALL_METHODS],
-    "a_cov_p10":      [_cov(additive_p10_df).get(m, nan)  for m in ALL_METHODS],
+    # Additive GAM — columns built dynamically from ADD_PS
+    **{f"a_mise_p{p:02d}": [_rel(additive_dfs[p]).get(m, nan) for m in ALL_METHODS]
+       for p in ADD_PS},
 }, index=ALL_METHODS)
 
 GAUSS_COLS    = ["g_mise_global", "g_mise_local", "g_cov_global", "g_cov_local"]
 LOGI_COLS     = ["l_mise_global", "l_mise_local", "l_cov_global", "l_cov_local"]
-ADDITIVE_COLS = ["a_mise_p01", "a_mise_p05", "a_mise_p10",
-                 "a_cov_p01", "a_cov_p05", "a_cov_p10"]
+ADDITIVE_COLS = [f"a_mise_p{p:02d}" for p in ADD_PS]
 ALL_COLS      = GAUSS_COLS + LOGI_COLS + ADDITIVE_COLS
 
 def is_lower_better(col):
@@ -183,14 +196,16 @@ def fmt_tex(v, bold=False):
 
 # ── Markdown table ────────────────────────────────────────────────────────────
 
+_add_hdrs = " | ".join(f"MISE p={p}" for p in ADD_PS)
+_add_seps = "|".join(":---------:" for _ in ADD_PS)
 header = ("| Basis | Method "
           "| MISE glob. | MISE loc. | Cov. glob. | Cov. loc. "
           "| MISE LP glob. | MISE LP loc. | Cov. glob. | Cov. loc. "
-          "| MISE p=1 | MISE p=5 | MISE p=10 | Cov. p=1 | Cov. p=5 | Cov. p=10 |")
+          f"| {_add_hdrs} |")
 sep    = ("|:------|:-------"
           "|:-----------:|:---------:|:-----------:|:---------:"
           "|:-------------:|:------------:|:-----------:|:---------:"
-          "|:-----------:|:---------:|:----------:|:---------:|:---------:|:----------:|")
+          f"|{_add_seps}|")
 
 rows_md = [header, sep]
 
@@ -213,12 +228,8 @@ for g in GROUPS:
             fmt_md(r["l_mise_local"],  bold=(best["l_mise_local"]  == m)),
             fmt_md(r["l_cov_global"],  bold=(best["l_cov_global"]  == m)),
             fmt_md(r["l_cov_local"],   bold=(best["l_cov_local"]   == m)),
-            fmt_md(r["a_mise_p01"],    bold=(best.get("a_mise_p01") == m)),
-            fmt_md(r["a_mise_p05"],    bold=(best.get("a_mise_p05") == m)),
-            fmt_md(r["a_mise_p10"],    bold=(best.get("a_mise_p10") == m)),
-            fmt_md(r["a_cov_p01"],     bold=(best.get("a_cov_p01")  == m)),
-            fmt_md(r["a_cov_p05"],     bold=(best.get("a_cov_p05")  == m)),
-            fmt_md(r["a_cov_p10"],     bold=(best.get("a_cov_p10")  == m)),
+            *[fmt_md(r[f"a_mise_p{p:02d}"], bold=(best.get(f"a_mise_p{p:02d}") == m))
+              for p in ADD_PS],
         ]
         rows_md.append("| " + " | ".join(cells) + " |")
 
@@ -250,19 +261,20 @@ tex_lines = [
     r"\centering",
     (rf"\caption{{GAM accuracy summary at $n = {N_FILTER}$."
      r" Each cell reports MISE relative to \texttt{gam\_cr\_gcv} ($M$)"
-     r" or empirical 95\,\% CI coverage ($C$) for univariate (global/local),"
-     r" logistic (LP scale), and additive ($p=1,5,10$) GAMs."
+     r" or empirical 95\,\% CI coverage ($C$) for univariate (global/local)"
+     r" and logistic (LP scale) GAMs, and MISE for additive GAMs"
+     rf" ($p \in \{{{', '.join(str(p) for p in ADD_PS)}\}}$)."
      r" Methods are grouped by spline basis. Bold = unique best within group.}"),
     r"\label{tab:accuracy_summary}",
     r"\resizebox{\linewidth}{!}{%",
-    r"\begin{tabular}{l p{2.1cm} rrrr rrrr rrrrrr}",
+    rf"\begin{{tabular}}{{l p{{2.1cm}} rrrr rrrr {'r' * len(ADD_PS)}}}",
     r"\toprule",
-    r" & & \multicolumn{4}{c}{Gaussian univ.} & \multicolumn{4}{c}{Logistic} & \multicolumn{6}{c}{Additive GAM} \\",
-    r"\cmidrule(lr){3-6}\cmidrule(lr){7-10}\cmidrule(lr){11-16}",
-    (r"Basis & Method"
+    rf" & & \multicolumn{{4}}{{c}}{{Gaussian univ.}} & \multicolumn{{4}}{{c}}{{Logistic}} & \multicolumn{{{len(ADD_PS)}}}{{c}}{{Additive GAM}} \\",
+    rf"\cmidrule(lr){{3-6}}\cmidrule(lr){{7-10}}\cmidrule(lr){{11-{10 + len(ADD_PS)}}}",
+    ("Basis & Method"
      r" & $M_g$ & $M_l$ & $C_g$ & $C_l$"
      r" & $M^\text{LP}_g$ & $M^\text{LP}_l$ & $C_g$ & $C_l$"
-     r" & $M_1$ & $M_5$ & $M_{10}$ & $C_1$ & $C_5$ & $C_{10}$ \\"),
+     " & " + " & ".join(rf"$M_{{{p}}}$" for p in ADD_PS) + r" \\"),
     r"\midrule",
 ]
 
@@ -285,12 +297,8 @@ for gi, g in enumerate(GROUPS):
             f"${fmt_tex(r['l_mise_local'],  bold=(best['l_mise_local']  == m))}$",
             f"${fmt_tex(r['l_cov_global'],  bold=(best['l_cov_global']  == m))}$",
             f"${fmt_tex(r['l_cov_local'],   bold=(best['l_cov_local']   == m))}$",
-            f"${fmt_tex(r['a_mise_p01'],    bold=(best.get('a_mise_p01') == m))}$",
-            f"${fmt_tex(r['a_mise_p05'],    bold=(best.get('a_mise_p05') == m))}$",
-            f"${fmt_tex(r['a_mise_p10'],    bold=(best.get('a_mise_p10') == m))}$",
-            f"${fmt_tex(r['a_cov_p01'],     bold=(best.get('a_cov_p01')  == m))}$",
-            f"${fmt_tex(r['a_cov_p05'],     bold=(best.get('a_cov_p05')  == m))}$",
-            f"${fmt_tex(r['a_cov_p10'],     bold=(best.get('a_cov_p10')  == m))}$",
+            *[f"${fmt_tex(r[f'a_mise_p{p:02d}'], bold=(best.get(f'a_mise_p{p:02d}') == m))}$"
+              for p in ADD_PS],
         ]
         tex_lines.append(" & ".join(cells) + r" \\")
 
