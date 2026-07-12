@@ -2,7 +2,8 @@
 #
 # Outputs (written to data/):
 #   {task}_n{n}_b{b:03d}.csv  — one CSV per (task, n, bootstrap replicate)
-#   tasks : global, local, additive_p01, additive_p03, additive_p05, additive_p10
+#   tasks : global, local,
+#           additive_p01, additive_p10, additive_p50, additive_p100
 #   n     : 100, 500, 2000
 #   B     : 500 replicates each
 #
@@ -40,8 +41,12 @@ COMP <- list(
   function(x) 20*(x - 0.5)^2,
   function(x) x
 )
-f_comp <- function(X, p)
-  Reduce(`+`, Map(function(f, j) f(X[, j]), COMP[seq_len(p)], seq_len(p)))
+# Components are recycled when p exceeds the library size, matching the
+# recycling rule in benchmark_r.R / generate_benchmark_data.py.
+f_comp <- function(X, p) {
+  fns_p <- COMP[((seq_len(p) - 1L) %% length(COMP)) + 1L]
+  Reduce(`+`, Map(function(f, j) f(X[, j]), fns_p, seq_len(p)))
+}
 
 # ── Univariate tasks (global / local) ─────────────────────────────────────────
 
@@ -70,7 +75,7 @@ for (task in c("global", "local")) {
 
 # ── Additive Gaussian tasks ───────────────────────────────────────────────────
 
-for (p in c(1, 3, 5, 10)) {
+for (p in c(1, 10, 50, 100)) {
   tag <- sprintf("additive_p%02d", p)
   for (n in c(100, 500, 2000)) {
     for (b in seq_len(B)) {

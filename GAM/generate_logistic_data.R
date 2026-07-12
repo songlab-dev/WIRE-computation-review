@@ -3,7 +3,7 @@
 # Outputs (written to data/):
 #   {task}_n{n}_b{b:03d}.csv  — one CSV per (task, n, bootstrap replicate)
 #   tasks : logistic_global, logistic_local,
-#           logistic_p01, logistic_p03, logistic_p05, logistic_p10
+#           logistic_p01, logistic_p10, logistic_p50, logistic_p100
 #   n     : 100, 500, 2000
 #   B     : 500 replicates each
 #
@@ -42,8 +42,28 @@ COMP <- list(
   function(x) 20*(x - 0.5)^2,
   function(x) x
 )
-f_comp <- function(X, p)
-  Reduce(`+`, Map(function(f, j) f(X[, j]), COMP[seq_len(p)], seq_len(p)))
+# Components are recycled when p exceeds the library size, matching the
+# recycling rule in benchmark_r.R / generate_benchmark_data.py.
+f_comp <- function(X, p) {
+  fns_p <- COMP[((seq_len(p) - 1L) %% length(COMP)) + 1L]
+  Reduce(`+`, Map(function(f, j) f(X[, j]), fns_p, seq_len(p)))
+}
+
+# The raw component sum grows with p, which saturates the response (every
+# y = 1 once p is large).  Standardise it to LP ~ N(0, 1.5^2) so the signal
+# is comparable at every p — the same rule bench_logistic_p() uses in
+# benchmark_r.R.  Calibration draws from its own seed and restores the main
+# RNG stream so the simulation draws below are unaffected.
+make_lp_fn <- function(p) {
+  old <- if (exists(".Random.seed", .GlobalEnv))
+    get(".Random.seed", .GlobalEnv) else NULL
+  set.seed(1234L + p)
+  raw <- f_comp(matrix(runif(20000 * p), nrow = 20000, ncol = p), p)
+  mu  <- mean(raw)
+  sdv <- sd(raw)
+  if (!is.null(old)) assign(".Random.seed", old, envir = .GlobalEnv)
+  function(X) 1.5 * (f_comp(X, p) - mu) / sdv
+}
 
 B      <- 500
 n_test <- 1000
@@ -78,8 +98,9 @@ for (task in c("logistic_global", "logistic_local")) {
 
 # ── Additive logistic tasks ───────────────────────────────────────────────────
 
-for (p in c(1, 3, 5, 10)) {
-  tag <- sprintf("logistic_p%02d", p)
+for (p in c(1, 10, 50, 100)) {
+  tag   <- sprintf("logistic_p%02d", p)
+  lp_of <- make_lp_fn(p)   # calibrated once per p, as in bench_logistic_p()
   for (n in c(100, 500, 2000)) {
     n_new <- 0L
     for (b in seq_len(B)) {
@@ -88,8 +109,8 @@ for (p in c(1, 3, 5, 10)) {
       X  <- matrix(runif(n * p),      nrow = n,      ncol = p)
       Xt <- matrix(runif(n_test * p), nrow = n_test, ncol = p)
       colnames(X) <- colnames(Xt) <- paste0("x", seq_len(p))
-      lp   <- f_comp(X, p)
-      lp_t <- f_comp(Xt, p)
+      lp   <- lp_of(X)
+      lp_t <- lp_of(Xt)
       y    <- rbinom(n,      1, plogis(lp))
       yt   <- rbinom(n_test, 1, plogis(lp_t))
       write.csv(

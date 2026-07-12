@@ -231,7 +231,7 @@ for task in ("logistic_global", "logistic_local"):
         df.index.name = "method"
         df.reset_index().to_csv(out, index=False)
 
-for p in (1, 3, 5, 10):
+for p in (1, 10, 50, 100):
     tag = f"logistic_p{p:02d}"
     for n in (100, 500, 2000):
         out = f"{RESULTS}/python_{tag}_n{n}.csv"
