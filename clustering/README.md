@@ -23,7 +23,7 @@ Benchmarking clustering algorithms across: Python (CPU), Python (GPU), and R.
 
 Five clustering algorithms are compared. Not all are available on every platform:
 
-| Algorithm | Python CPU | Python GPU | R |
+| Algorithm | Python (CPU) | Python (GPU) | R (CPU) |
 | :--- | :---: | :---: | :---: |
 | K-Means | ✓ | ✓ | ✓ |
 | GMM | ✓ | — | ✓ |
