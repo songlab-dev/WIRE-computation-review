@@ -8,10 +8,29 @@ suppressPackageStartupMessages({
   library(readr)
 })
 
-out_dir <- Sys.getenv("EXPERIMENT_DIR", "outputs/main_n500")
+out_dir <- normalizePath(
+  Sys.getenv("EXPERIMENT_DIR", "outputs/main_n500"),
+  mustWork = FALSE
+)
 data_dir <- file.path(out_dir, "data")
 results_dir <- file.path(out_dir, "results")
 dir.create(results_dir, recursive = TRUE, showWarnings = FALSE)
+# Keep temporary pycox checkpoints separate for concurrent experiments.
+setwd(results_dir)
+
+set_all_seeds <- function(seed) {
+  seed <- as.integer(seed)
+  set.seed(seed)
+  py_random <- reticulate::import("random")
+  py_numpy <- reticulate::import("numpy")
+  py_torch <- reticulate::import("torch")
+  py_random$seed(seed)
+  py_numpy$random$seed(seed)
+  py_torch$manual_seed(seed)
+  if (py_torch$cuda$is_available()) {
+    py_torch$cuda$manual_seed_all(seed)
+  }
+}
 
 choose_time_grid <- function(train, test, n_grid = 100) {
   lower <- as.numeric(quantile(test$time, 0.10, na.rm = TRUE))
@@ -178,7 +197,7 @@ run_one <- function(cfg) {
   setting <- cfg$setting
   rep <- cfg$rep
   p <- cfg$p
-  set.seed(880000 + rep)
+  set_all_seeds(880000 + rep)
   x_cols <- paste0("x", seq_len(p))
 
   train <- read_split(setting, rep, "train")
@@ -213,8 +232,8 @@ run_one <- function(cfg) {
   )
   runtime_sec <- proc.time()[["elapsed"]] - start_time
 
-  test_eval <- restrict_test_to_train_support(train_val, test)
-  time_grid <- choose_time_grid(train_val, test_eval)
+  test_eval <- restrict_test_to_train_support(train, test)
+  time_grid <- choose_time_grid(train, test_eval)
   pred <- predict(
     fit,
     newdata = test[, x_cols],
@@ -222,10 +241,10 @@ run_one <- function(cfg) {
     type = "survival"
   )
   surv_mat <- format_survival_matrix(pred, nrow(test), time_grid)
-  eval_mask <- test$time < max(train_val$time, na.rm = TRUE)
+  eval_mask <- test$time < max(train$time, na.rm = TRUE)
   ibs <- compute_ibs_manual(
     surv_mat[eval_mask, , drop = FALSE],
-    train_val,
+    train,
     test_eval,
     time_grid
   )

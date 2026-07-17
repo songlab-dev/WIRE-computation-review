@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import random
 import time
 import warnings
 from pathlib import Path
@@ -31,6 +32,7 @@ CONFIG = {
 
 
 def set_all_seeds(seed: int) -> None:
+    random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     if torch.cuda.is_available():

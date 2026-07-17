@@ -66,6 +66,8 @@ Model settings are fixed across replications: penalized Cox selects from 100 L1-
 
 The predefined validation split is used directly for penalized Cox and Python DeepSurv. The R `survivalmodels` interface instead creates an internal 25% validation subset from the combined training and validation pool, preserving the same 60%/20% effective proportions. This package-interface difference is retained intentionally.
 
+All implementations use the original training split to estimate the censoring distribution and define the follow-up support for IBS. Both DeepSurv implementations set Python, NumPy, and PyTorch seeds for every replication; the R interface also sets the corresponding R seed.
+
 ## Pipeline
 
 | Step | File | Purpose |
@@ -100,4 +102,4 @@ Each run creates four implementation-level result files, then produces:
 | `summary.csv` | Mean and standard deviation by setting, model, and language |
 | `manuscript_table.tex` | LaTeX table generated from `summary.csv` |
 
-Checked reference outputs are stored in `results/main_n500/` and `results/sensitivity_n1000_n1500/`. The main table contains 800 successful fits; the sensitivity results contain 1,600 successful fits. DeepSurv and runtime values can vary slightly across hardware and numerical-library versions, although seeds and model settings are fixed.
+Checked reference outputs are stored in `results/main_n500/` and `results/sensitivity_n1000_n1500/`. The main table contains 800 successful fits; the sensitivity results contain 1,600 successful fits. Small numerical and runtime differences can still occur across hardware and numerical-library versions, although seeds and model settings are fixed.
