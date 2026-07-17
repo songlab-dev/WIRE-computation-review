@@ -1,0 +1,43 @@
+\begin{table}[htbp]
+\centering
+\small
+\caption{Simulation results comparing representative R and Python survival-analysis implementations under 30\% censoring. Values are mean (SD) over 50 replications.}
+\label{tab:survival_simulation_results}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{lllcc}
+\hline
+Model & Implementation & IBS & C-index & Time (s) \\
+\hline
+\multicolumn{5}{l}{\textit{Setting 1: High-dimensional sparse Cox}}\\
+Penalized Cox & R (\texttt{glmnet}) & \textbf{0.195 (0.017)} & \textbf{0.612 (0.052)} & 2.083 (0.317) \\
+ & Python (\texttt{scikit-survival}) & \textbf{0.195 (0.017)} & \textbf{0.612 (0.053)} & 1.306 (0.201) \\
+RSF & R (\texttt{randomForestSRC}) & 0.206 (0.014) & 0.543 (0.042) & 0.430 (0.091) \\
+ & Python (\texttt{scikit-survival}) & 0.206 (0.013) & 0.546 (0.040) & 0.818 (0.016) \\
+Boosting & R (\texttt{gbm}) & 0.241 (0.032) & 0.560 (0.041) & 1.740 (0.055) \\
+ & Python (\texttt{scikit-survival}) & 0.235 (0.026) & 0.560 (0.046) & 12.686 (0.075) \\
+DeepSurv & R (\texttt{survivalmodels}) & 0.223 (0.014) & 0.512 (0.041) & 0.447 (0.968) \\
+ & Python (\texttt{pycox}) & 0.223 (0.021) & 0.513 (0.045) & 0.206 (0.052) \\
+\hline
+\multicolumn{5}{l}{\textit{Setting 2: Smooth nonlinear survival}}\\
+CoxPH & R (\texttt{survival}) & 0.223 (0.017) & 0.579 (0.034) & 0.017 (0.009) \\
+ & Python (\texttt{lifelines}) & 0.223 (0.017) & 0.579 (0.034) & 0.115 (0.010) \\
+RSF & R (\texttt{randomForestSRC}) & \textbf{0.190 (0.013)} & 0.652 (0.036) & 0.144 (0.031) \\
+ & Python (\texttt{scikit-survival}) & 0.193 (0.012) & 0.641 (0.038) & 0.338 (0.007) \\
+Boosting & R (\texttt{gbm}) & 0.210 (0.025) & \textbf{0.659 (0.039)} & 0.179 (0.029) \\
+ & Python (\texttt{scikit-survival}) & 0.200 (0.019) & 0.657 (0.039) & 1.691 (0.010) \\
+DeepSurv & R (\texttt{survivalmodels}) & 0.210 (0.016) & 0.565 (0.040) & 0.327 (0.085) \\
+ & Python (\texttt{pycox}) & 0.210 (0.015) & 0.566 (0.040) & 0.348 (0.097) \\
+\hline
+\end{tabular}
+\vspace{4pt}
+\begin{minipage}{\linewidth}
+\footnotesize
+\textit{Notes:}
+IBS denotes the IPCW-integrated Brier score, where smaller values indicate better prediction.
+C-index measures discrimination, where larger values indicate better risk ranking.
+Time denotes mean model-fitting runtime in seconds per replication, excluding data generation and evaluation.
+Runtime differences reflect package-specific implementations and tuning procedures and should not be interpreted as language-level benchmarks.
+Bold values indicate the best predictive performance within each setting for IBS and C-index.
+\end{minipage}
+\end{table}
