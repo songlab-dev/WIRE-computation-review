@@ -332,20 +332,20 @@ for (method in methods) {
         n_features
       )
     )
-    write.csv(slice_results, slice_out_file, row.names = FALSE)
+    #write.csv(slice_results, slice_out_file, row.names = FALSE)
 
     # Update cumulative raw and summary checkpoints after every slice.
     write.csv(all_results, cumulative_out_file, row.names = FALSE)
-    write.csv(summary_results, summary_out_file, row.names = FALSE)
+    #write.csv(summary_results, summary_out_file, row.names = FALSE)
 
-    cat(sprintf("-> Saved slice results to %s\n", slice_out_file))
-    cat(sprintf("-> Updated cumulative results at %s\n", cumulative_out_file))
-    cat(sprintf("-> Updated summary results at %s\n", summary_out_file))
+    #cat(sprintf("-> Saved slice results to %s\n", slice_out_file))
+    #cat(sprintf("-> Updated cumulative results at %s\n", cumulative_out_file))
+    #cat(sprintf("-> Updated summary results at %s\n", summary_out_file))
   }
 
   # Final write for the completed method.
   write.csv(all_results, cumulative_out_file, row.names = FALSE)
-  write.csv(summary_results, summary_out_file, row.names = FALSE)
+  #write.csv(summary_results, summary_out_file, row.names = FALSE)
 
   cat(sprintf(
     "\nCompleted %s. Final results saved to %s\n",
