@@ -34,8 +34,8 @@ slice_folders = [d for d in os.listdir(base_data_dir) if os.path.isdir(os.path.j
 slice_folders.sort()
 
 # Define a list of method names to iterate over (including GMM)
-#methods = ["KMeans", "GMM", "HDBSCAN", "HC", "DBSCAN"]
-methods = ["GMM"]
+methods = ["KMeans", "GMM", "HDBSCAN", "HC", "DBSCAN"]
+
 
 # Define a function to instantiate the correct model based on the method name, seed, and number of clusters
 def get_cpu_model(method_name, seed, n_clusters):
@@ -59,6 +59,7 @@ def get_cpu_model(method_name, seed, n_clusters):
     elif method_name == "HC":
         # Return an AgglomerativeClustering instance with the specified number of clusters
         return AgglomerativeClustering(n_clusters=n_clusters)
+        #return AgglomerativeClustering(n_clusters=n_clusters, linkage="single", metric="euclidean")
     # Raise an error if the method name is not recognized
     else:
         raise ValueError(f"Unknown method: {method_name}")
@@ -107,8 +108,8 @@ for method in methods:
             print("  Performing CPU Warm-up...")
             # Load the first replicate dataset from the current slice to use for warm-up
             warm_data = np.load(os.path.join(slice_dir, "replicate_0.npz"))
-            # Extract the first 1000 samples and cast them to float32
-            X_warm = warm_data["X"][:1000].astype(np.float32)
+            # Extract the first 1000 samples
+            X_warm = warm_data["X"][:1000].astype(np.float64)
             # Instantiate a warm-up model using seed 0 and current cluster count
             warm_model = get_cpu_model(method, seed=0, n_clusters=n_clusters)
             # Fit the warm-up model to initialize internal scikit-learn libraries
@@ -129,23 +130,23 @@ for method in methods:
             # Extract the true labels y
             y_true = data["y"]
 
-            # Cast the feature matrix to float32 as expected by the algorithms
-            X_cpu = X.astype(np.float32)
+            # Cast the feature matrix to float as expected by the algorithms
+            X_cpu = X.astype(np.float64)
 
             # Instantiate the model for the current replicate
             model = get_cpu_model(method, seed=i, n_clusters=n_clusters)
 
             # Record the start time before fitting the model
-            start_time = time.time()
+            start_time = time.perf_counter()
             # Fit the model to the data and return the predicted cluster labels
             labels = model.fit_predict(X_cpu)
             # Calculate the elapsed time
-            elapsed_time = time.time() - start_time
+            elapsed_time = time.perf_counter() - start_time
 
             # Calculate the Adjusted Rand Score
             ari = adjusted_rand_score(y_true, labels)
             # Calculate the Normalized Mutual Information score
-            nmi = normalized_mutual_info_score(y_true, labels)
+            nmi = normalized_mutual_info_score(y_true, labels, average_method="arithmetic")
 
             # Append a dictionary with the results for this replicate to the all_results list
             all_results.append({
@@ -169,7 +170,7 @@ for method in methods:
     # Convert the collected results for all slices into a pandas DataFrame
     results_df = pd.DataFrame(all_results)
     # Define the output CSV filename for the current method
-    output_filename = f"new_results/python_{method.lower()}_cpu_results.csv"
+    output_filename = f"results/python_{method.lower()}_cpu_results.csv"
     # Save the DataFrame to a CSV file without writing the row indices
     results_df.to_csv(output_filename, index=False)
     # Print a confirmation that the CSV file was saved

@@ -28,7 +28,7 @@ from sklearn.metrics import adjusted_rand_score
 from sklearn.metrics import normalized_mutual_info_score
 
 # Define the base directory where all the slice folders are stored
-base_data_dir = "new_data"
+base_data_dir = "data"
 
 # Find all subdirectories in the base directory that start with 'n_'
 slice_folders = [d for d in os.listdir(base_data_dir) if os.path.isdir(os.path.join(base_data_dir, d)) and d.startswith("n_")]
@@ -36,8 +36,7 @@ slice_folders = [d for d in os.listdir(base_data_dir) if os.path.isdir(os.path.j
 slice_folders.sort()
 
 # Define a list of method names to iterate over (excluding GMM)
-#methods = ["KMeans", "HDBSCAN", "DBSCAN", "HC"]
-methods = ["HC"]
+methods = ["KMeans", "HDBSCAN", "DBSCAN", "HC"]
 
 # Define a function to instantiate the correct GPU model based on the method name, seed, and cluster count
 def get_gpu_model(method_name, seed, n_clusters):
@@ -114,8 +113,8 @@ for method in methods:
             print("  Performing GPU Warm-up...")
             # Load the first replicate dataset to act as warm-up data
             warm_data = np.load(os.path.join(slice_dir, "replicate_0.npz"))
-            # Extract the first 1000 samples, cast to float32, and transfer to GPU using cupy
-            X_warm_gpu = cp.asarray(warm_data["X"][:1000].astype(np.float32))
+            # Extract the first 1000 samples
+            X_warm_gpu = cp.asarray(warm_data["X"][:1000].astype(np.float64))
             
             # Instantiate a warm-up model dynamically using the unified function
             warm_model = get_gpu_model(method, seed=0, n_clusters=n_clusters)
@@ -138,19 +137,23 @@ for method in methods:
             # Extract true labels
             y_true = data["y"]
 
-            # Cast the feature matrix to float32 and transfer to the GPU
-            X_gpu = cp.asarray(X.astype(np.float32))
-
-            # Record the start time right before the modeling process
-            start_time = time.time()
+            # Cast the feature matrix and transfer to the GPU
+            X_gpu = cp.asarray(X.astype(np.float64))
             
             # Instantiate the model for the current replicate using the unified function
             model = get_gpu_model(method, seed=i, n_clusters=n_clusters)
+
+            cp.cuda.Device().synchronize()
+
+            start_time = time.perf_counter()
+            
             # Fit the model and get predictions on the GPU
             labels_gpu = model.fit_predict(X_gpu)
+
+            cp.cuda.Device().synchronize()
                 
             # Calculate the elapsed time
-            elapsed_time = time.time() - start_time
+            elapsed_time = time.perf_counter() - start_time
 
             # Transfer the predicted labels back to the CPU memory for scoring
             labels_cpu = labels_gpu.get()
@@ -158,7 +161,7 @@ for method in methods:
             # Calculate ARI using the CPU labels
             ari = adjusted_rand_score(y_true, labels_cpu)
             # Calculate NMI using the CPU labels
-            nmi = normalized_mutual_info_score(y_true, labels_cpu)
+            nmi = normalized_mutual_info_score(y_true, labels_cpu, average_method="arithmetic")
 
             # Append the results for this replicate into the list
             all_results.append({
@@ -186,7 +189,7 @@ for method in methods:
     os.makedirs("results", exist_ok=True)
     
     # Define the output CSV filename dynamically
-    output_filename = f"new_results/python_{method.lower()}_gpu_results.csv"
+    output_filename = f"results/python_{method.lower()}_gpu_results.csv"
     # Save the DataFrame to a CSV without row indices
     results_df.to_csv(output_filename, index=False)
     # Print confirmation that the file was saved
