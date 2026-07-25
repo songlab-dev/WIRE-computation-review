@@ -105,22 +105,3 @@ install.packages(c("lme4", "glmmTMB", "sjSDM"))
 
 For detailed architecture, design decisions, and usage examples, see [code/README.md](code/README.md).
 
-## License
-
-MIT
-
-## Citation
-
-If you use this framework, please cite:
-```
-@misc{glmm-simulation-framework,
-  author = {Your Name},
-  title = {GLMM Simulation Framework},
-  year = {2026},
-  url = {https://github.com/yourusername/glmm-simulation}
-}
-```
-
-## Contact
-
-For questions or issues, please open an issue on GitHub.
