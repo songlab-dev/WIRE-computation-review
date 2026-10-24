@@ -7,11 +7,11 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=8G
 #SBATCH --time=01:00:00
-#SBATCH --output=%D/logs/%x_%j.out
-#SBATCH --error=%D/logs/%x_%j.err
+#SBATCH --output=logs/%x_%j.out
+#SBATCH --error=logs/%x_%j.err
 
 # Submit from the project root: sbatch public/slurm/run_generate.sh
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"   # sbatch runs a spool copy
 mkdir -p "$ROOT/logs" "$ROOT/data"
 
 module load R/4.3.1   # adjust R version as needed

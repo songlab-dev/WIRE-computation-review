@@ -33,22 +33,26 @@ BASELINE = "gam_cr_gcv"
 
 # Methods grouped by spline basis, in display order.
 GROUPS = [
-    {"basis": "Natural cubic", "methods": ["gam_cr_gcv", "bam_cr_gcv"]},
-    {"basis": "P-splines",     "methods": ["gam_ps_gcv", "gamdist_ps_ml", "pygam_gcv"]},
+    {"basis": "Natural cubic", "methods": ["gam_cr_gcv", "bam_cr_gcv", "gamdist_cr_gcv"]},
+    {"basis": "P-splines",     "methods": ["gam_ps_gcv", "gamlss_ps_ml", "pygam_gcv"]},
     {"basis": "B-splines",     "methods": ["gam_bs_gcv", "statsmodels_bs_gcv"]},
 ]
 
 ALL_METHODS = [m for g in GROUPS for m in g["methods"]]
 
 METHOD_LABELS = {
-    "gam_cr_gcv":         "mgcv::gam (cr, GCV) — baseline",
-    "bam_cr_gcv":         "mgcv::bam (cr, GCV)",
-    "gam_ps_gcv":         "mgcv::gam (ps, GCV)",
-    "gamdist_ps_ml":      "gamlss (ps, ML)",
-    "pygam_gcv":          "pyGAM (ps, GCV)",
-    "gam_bs_gcv":         "mgcv::gam (bs, GCV)",
-    "statsmodels_bs_gcv": "statsmodels (bs, GCV)",
+    "gam_cr_gcv":         "mgcv::gam (cr, GCV) [R] — baseline",
+    "bam_cr_gcv":         "mgcv::bam (cr, GCV) [R]",
+    "gamdist_cr_gcv":     "gamdist (cr, 5-grid GCV) [py]",
+    "gam_ps_gcv":         "mgcv::gam (ps, GCV) [R]",
+    "gamlss_ps_ml":       "gamlss (ps, ML) [R]",
+    "pygam_gcv":          "pyGAM (ps, GCV) [py]",
+    "gam_bs_gcv":         "mgcv::gam (bs, GCV) [R]",
+    "statsmodels_bs_gcv": "statsmodels (bs, 5-grid GCV) [py]",
 }
+
+# Results written before the rename used "gamdist_*" for the gamlss fits.
+LEGACY_METHODS = {"gamdist_ps_ml": "gamlss_ps_ml"}
 
 
 # ── Data loading ──────────────────────────────────────────────────────────────
@@ -65,7 +69,8 @@ def load_task(task: str) -> pd.DataFrame:
             continue
         if "task" not in df.columns:
             continue
-        sub = df[df["task"] == task]
+        sub = df[df["task"] == task].copy()
+        sub["method"] = sub["method"].replace(LEGACY_METHODS)
         if not sub.empty:
             frames.append(sub)
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
@@ -93,6 +98,7 @@ def relative_mise(df: pd.DataFrame) -> dict:
 # ── Build data frame ──────────────────────────────────────────────────────────
 
 N_FILTER = 500   # report metrics at this training size
+N_REPS   = 500   # replicates behind each cell (simulation size)
 
 def _filter_n(df): return df[df["n"] == N_FILTER] if not df.empty else df
 
@@ -185,14 +191,16 @@ print(f"saved {md_out}")
 # ── LaTeX table ───────────────────────────────────────────────────────────────
 
 # Shorter labels for the narrow Method column.
+# \Ricon / \pyicon mark the programming environment (defined in the paper preamble).
 METHOD_LABELS_TEX = {
-    "gam_cr_gcv":         r"gam (cr) $\star$",
-    "bam_cr_gcv":         r"bam (cr)",
-    "gam_ps_gcv":         r"gam (ps)",
-    "gamdist_ps_ml":      r"gamlss",
-    "pygam_gcv":          r"pyGAM",
-    "gam_bs_gcv":         r"gam (bs)",
-    "statsmodels_bs_gcv": r"statsmodels",
+    "gam_cr_gcv":         r"gam (cr)\,\Ricon{} $\star$",
+    "bam_cr_gcv":         r"bam (cr)\,\Ricon{}",
+    "gamdist_cr_gcv":     r"gamdist\,\pyicon{}",
+    "gam_ps_gcv":         r"gam (ps)\,\Ricon{}",
+    "gamlss_ps_ml":       r"gamlss\,\Ricon{}",
+    "pygam_gcv":          r"pyGAM\,\pyicon{}",
+    "gam_bs_gcv":         r"gam (bs)\,\Ricon{}",
+    "statsmodels_bs_gcv": r"statsmodels\,\pyicon{}",
 }
 
 def label_tex(m):
@@ -201,11 +209,15 @@ def label_tex(m):
 tex_lines = [
     r"\begin{table}[ht]",
     r"\centering",
-    (rf"\caption{{GAM accuracy summary at $n = {N_FILTER}$."
-     r" Each cell reports MISE relative to \texttt{gam\_cr\_gcv} ($M$)"
-     r" for univariate GAMs with a global ($g$) or local ($l$) smooth,"
-     r" under Gaussian and logistic (linear-predictor scale) response."
-     r" Methods are grouped by spline basis. Bold = unique best within group.}"),
+    (rf"\caption{{Accuracy of GAM fitting methods at $n = {N_FILTER}$ ({N_REPS} replicates)"
+     r" for a single smooth term that is global ($g$) or local ($l$)."
+     r" Entries are the mean squared error against the true function on 1{,}000"
+     r" test points (MISE), relative to \texttt{gam} (cr) ($\star$; $= 1$): lower is better."
+     r" Gaussian responses give $M_g, M_l$; logistic responses give"
+     r" $M^\text{LP}_g, M^\text{LP}_l$, measured on the log-odds (linear-predictor) scale."
+     r" Icons mark the programming environment (\Ricon{} R, \pyicon{} Python)."
+     r" Methods are grouped by spline basis; \textbf{bold} marks the unique lowest value"
+     r" within each basis group.}"),
     r"\label{tab:accuracy_summary}",
     r"\resizebox{\linewidth}{!}{%",
     r"\begin{tabular}{l p{2.1cm} rr rr}",
@@ -242,8 +254,6 @@ for gi, g in enumerate(GROUPS):
 tex_lines += [
     r"\bottomrule",
     r"\end{tabular}}",  # closes \resizebox
-    (r"\par\smallskip"
-     r"{\footnotesize $\star$: baseline (reference MISE = 1). Bold = unique best within basis group.}"),
     r"\end{table}",
 ]
 

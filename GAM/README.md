@@ -6,12 +6,12 @@ All scripts read/write relative to the **project root** (`data/`, `results/`).
 
 ## Requirements
 
-**R packages** (mgcv, gamlss, gamlss.dist):
+**R packages** (mgcv, gamlss, gamlss.dist, bench):
 ```bash
 Rscript public/install_packages.R
 ```
 
-**Python packages** (statsmodel, pyGAM)
+**Python packages** (statsmodels, pyGAM, gamdist; Python >= 3.11)
 ```bash
 pip install -r public/requirements.txt
 ```
@@ -35,41 +35,64 @@ python  public/simulate_logistic_python.py
 python public/make_accuracy_table.py
 ```
 
-## Scalability comparison
+Each simulation script runs every (task, n) cell by default, writes one chunk
+per replicate to `results/sim_chunks/` (finished reps are skipped on rerun),
+and averages them into `results/{r,python}_<task>_n<n>.csv`. Cells whose summary
+CSV already exists are skipped. To run a single cell, or to split one across
+jobs:
 
 ```bash
-# Run R and Python benchmarks (can run in parallel; each checkpoints per rep)
-Rscript public/benchmark_r.R
-python  public/benchmark_python.py
+python public/simulate_python.py global 500                        # one cell
+SIM_REP_START=1 SIM_REP_END=100 python public/simulate_python.py additive_p50 500   # one shard
+python public/simulate_python.py --merge                           # average chunks into the CSVs
+```
 
-# Build the table
+Sharded runs only write chunks, so run `--merge` afterwards (any of the four
+scripts; `submit_simulations.sh` does this automatically).
+
+## Scalability comparison
+
+Both benchmarks fit the same datasets: R draws them once per cell, then R and
+Python read them. Each fit runs in its own worker process, and results are
+checkpointed after every rep.
+
+```bash
+# 1. Draw the shared datasets for a cell
+Rscript public/benchmark_r.R --gen additive_p10 100000
+
+# 2. Run R and Python on that cell (can run in parallel)
+Rscript public/benchmark_r.R additive_p10 100000
+python  public/benchmark_python.py additive_p10 100000
+
+# 3. Build the table, after all cells are done
 python public/make_scalability_table.py
 ```
 
-Each benchmark script accepts optional `<scenario> <n>` arguments to run a
-single cell (useful for parallel job arrays):
-```bash
-Rscript public/benchmark_r.R additive_p10 100000
-python  public/benchmark_python.py logistic_p50 1000
-```
+Scenarios are `additive_p{01,05,10,50,100}` and `logistic_p{01,05,10,50,100}` (the SLURM grid uses p >= 5), with
+n = 1000 or 100000. Environment variables (see the script headers) restrict a run to a
+rep range (`BENCH_REP_START/END`) or a subset of Python methods (`BENCH_METHODS`).
 
 ## SLURM (HPC cluster)
 
-Edit `--account` and `--partition` in `slurm/*.sh` to match your cluster,
-then submit from the project root:
+Set `ACCOUNT` (and adjust `--partition`, `module load` and the `wire/bin/activate`
+line if your cluster differs), then submit from the project root:
 
 ```bash
-# Full simulation pipeline (install → generate → simulate)
-bash public/slurm/submit_all.sh
+# One-time setup: install R and Python packages
+sbatch --account=$ACCOUNT public/slurm/run_install.sh
 
-# Logistic pipeline only
-bash public/slurm/submit_logistic.sh
+# Accuracy simulations (R and Python, Gaussian and logistic), sharded, with a
+# merge job per script. GENERATE=1 also generates the datasets first.
+GENERATE=1 ACCOUNT=$ACCOUNT bash public/slurm/submit_simulations.sh
 
-# Benchmark grid (one job per scenario × n cell)
-bash public/slurm/submit_benchmark_grid.sh
+# Scalability benchmark grid (scenario x n cells, sharded by rep range)
+ACCOUNT=$ACCOUNT bash public/slurm/submit_benchmark_grid.sh
+
+# Tables, after all jobs finish
+python public/make_accuracy_table.py
+python public/make_scalability_table.py
 ```
 
+`run_generate.sh` and `run_logistic_generate.sh` are called by
+`submit_simulations.sh` when `GENERATE=1`.
 Log files are written to `logs/` in the project root.
-The Python environment is activated from `wire/bin/activate`; adjust the
-`source` line in the relevant scripts if you use a different virtual
-environment or conda.

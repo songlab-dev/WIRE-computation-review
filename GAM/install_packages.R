@@ -1,5 +1,5 @@
 cran <- "https://cloud.r-project.org"
-needed <- c("mgcv", "gamlss", "gamlss.dist")
+needed <- c("mgcv", "gamlss", "gamlss.dist", "bench")
 
 # Install to user library if needed
 user_lib <- Sys.getenv("R_LIBS_USER")
@@ -24,7 +24,7 @@ for (pkg in needed) {
 # NOTE: predict.gamlss(..., se.fit=TRUE) silently downgrades to a plain vector
 # when newdata is supplied (warning: "se.fit = TRUE is not supported for new
 # data values at the moment"). simulate_r.R's try_metrics_gamlss() already
-# handles this — coverage will be reported as NA for gamdist.
+# handles this — coverage will be reported as NA for gamlss.
 suppressPackageStartupMessages(library(gamlss))
 set.seed(1)
 df  <- data.frame(x = runif(200))
