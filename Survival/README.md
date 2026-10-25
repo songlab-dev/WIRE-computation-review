@@ -1,18 +1,36 @@
 # Survival analysis
 
-Code and results for Section 4 of the WIREs review. The final experiment uses
-100 independent datasets for each of two settings and three sample sizes:
-600 datasets and 4,800 R/Python fits.
+Code and results for the survival-analysis experiments in Section 4 of our
+WIREs review. The study includes two simulation settings, three sample sizes,
+and 100 independent datasets per configuration: 600 datasets and 4,800 fits.
 
-The checked results are in [results/summary](results/summary). Each row reports
-IBS, C-index, fitting time, and Peak RSS. All 4,800 fits succeeded; one failed
-startup attempt was retried. The earlier 50-replication study remains in Git history.
+The [per-fit results](results/summary/all_runs.csv) report IBS, C-index, fitting
+time, and Peak RSS. The [summary table](results/summary/summary.csv) gives the
+mean and sample standard deviation for each setting, sample size, model, and
+implementation.
+
+## Check the saved results
+
+From this directory, use Python 3 to verify the saved summaries:
+
+```bash
+export SURV_PYTHON=python3
+./run.sh verify-results
+```
+
+This checks all 384 reported means and standard deviations against the saved
+per-fit results, without fitting any models. It requires neither Slurm nor a
+specific CPU model.
 
 ## Reproduce the experiment
 
-Use Linux and the versions in [environment](environment). On Great Lakes, each
-fit requests 4 CPUs and 32 GiB, uses one computational thread, and requires an
-Intel Xeon Gold 6154 CPU. No GPU is used.
+Use Linux and the versions in [environment](environment). The fitting runner
+requires an **Intel Xeon Gold 6154** CPU and stops before fitting on other CPU
+models. This check keeps the benchmark hardware consistent; fitting time and
+Peak RSS measured on different hardware are not directly comparable.
+
+On Great Lakes, each fit requests 4 CPUs and 32 GiB and uses one computational
+thread. No GPU is used.
 
 Run these commands from this directory. Set the two Python paths, your Slurm
 account, and a new output directory:
