@@ -1,0 +1,6 @@
+{
+  "valid_fits": 4800,
+  "cells": 48,
+  "replications_per_cell": 100,
+  "independently_verified_mean_and_sample_sd_values": 384
+}

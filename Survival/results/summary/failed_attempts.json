@@ -1,0 +1,11 @@
+[
+  {
+    "task_id": 1982,
+    "dataset_id": "highdim_n1500_r048",
+    "model": "DeepSurv",
+    "language": "R",
+    "attempt": "attempt_001",
+    "status": "failed",
+    "error": "[Errno 3] No such process"
+  }
+]

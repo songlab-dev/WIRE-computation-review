@@ -1,0 +1,79 @@
+{
+  "active_fits": 4800,
+  "model_language_cells": 48,
+  "replications_per_cell": 100,
+  "active_failure_count": 0,
+  "superseded_deep_batch128_fits": 228,
+  "fits_with_worker_warnings": 0,
+  "hardware_models": [
+    "Intel(R) Xeon(R) Gold 6154 CPU @ 3.00GHz"
+  ],
+  "nodes": [
+    "gl3030.arc-ts.umich.edu",
+    "gl3074.arc-ts.umich.edu",
+    "gl3097.arc-ts.umich.edu",
+    "gl3098.arc-ts.umich.edu",
+    "gl3099.arc-ts.umich.edu",
+    "gl3100.arc-ts.umich.edu",
+    "gl3126.arc-ts.umich.edu",
+    "gl3148.arc-ts.umich.edu",
+    "gl3257.arc-ts.umich.edu",
+    "gl3274.arc-ts.umich.edu",
+    "gl3275.arc-ts.umich.edu",
+    "gl3276.arc-ts.umich.edu",
+    "gl3277.arc-ts.umich.edu",
+    "gl3278.arc-ts.umich.edu",
+    "gl3279.arc-ts.umich.edu",
+    "gl3280.arc-ts.umich.edu",
+    "gl3281.arc-ts.umich.edu",
+    "gl3283.arc-ts.umich.edu",
+    "gl3284.arc-ts.umich.edu",
+    "gl3285.arc-ts.umich.edu",
+    "gl3287.arc-ts.umich.edu",
+    "gl3288.arc-ts.umich.edu",
+    "gl3289.arc-ts.umich.edu",
+    "gl3291.arc-ts.umich.edu",
+    "gl3297.arc-ts.umich.edu",
+    "gl3305.arc-ts.umich.edu",
+    "gl3375.arc-ts.umich.edu"
+  ],
+  "os_thread_counts": [
+    1,
+    2,
+    4
+  ],
+  "computational_threads": 1,
+  "max_peak_rss_mib": 1886.74609375,
+  "max_fitting_time_s": 688.2635369449854,
+  "all_deep_training_logs_finite": true,
+  "deep_paired_datasets": 600,
+  "deep_max_abs_prediction_difference": 0.0,
+  "deep_max_abs_log_difference": 0.0,
+  "selected_releases": {
+    "CoxPH": {
+      "code_dir": "/home/menghany/WRIES/survival_revision_release_8e9cf0f44fca",
+      "code_sha256": "8e9cf0f44fcad799209d502177ff0b4c342a680fda5e5367b770c33f147478b5",
+      "result_root": "/scratch/pxsong_root/pxsong1/menghany/survival_revision_20261024"
+    },
+    "Coxnet": {
+      "code_dir": "/home/menghany/WRIES/survival_revision_release_8e9cf0f44fca",
+      "code_sha256": "8e9cf0f44fcad799209d502177ff0b4c342a680fda5e5367b770c33f147478b5",
+      "result_root": "/scratch/pxsong_root/pxsong1/menghany/survival_revision_20261024"
+    },
+    "RSF": {
+      "code_dir": "/home/menghany/WRIES/survival_revision_release_8e9cf0f44fca",
+      "code_sha256": "8e9cf0f44fcad799209d502177ff0b4c342a680fda5e5367b770c33f147478b5",
+      "result_root": "/scratch/pxsong_root/pxsong1/menghany/survival_revision_20261024"
+    },
+    "Boosting": {
+      "code_dir": "/home/menghany/WRIES/survival_revision_release_8e9cf0f44fca",
+      "code_sha256": "8e9cf0f44fcad799209d502177ff0b4c342a680fda5e5367b770c33f147478b5",
+      "result_root": "/scratch/pxsong_root/pxsong1/menghany/survival_revision_20261024"
+    },
+    "DeepSurv": {
+      "code_dir": "/home/menghany/WRIES/survival_revision_release_fd1a34ce62c0",
+      "code_sha256": "fd1a34ce62c073a8e650709cac10dfc534b6d643b98e2d7b1707ad5b5da16b16",
+      "result_root": "/scratch/pxsong_root/pxsong1/menghany/survival_revision_20261024/deep_v2"
+    }
+  }
+}

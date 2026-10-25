@@ -1,0 +1,268 @@
+[[1]]
+Title: Survival Analysis
+Priority: recommended
+Package: survival
+Version: 3.8-6
+Date: 2026-01-09
+Depends: R (>= 3.5.0)
+Imports: graphics, Matrix, methods, splines, stats, utils
+LazyData: Yes
+LazyDataCompression: xz
+ByteCompile: Yes
+Authors@R: c(person(c("Terry", "M"), "Therneau",
+        email="therneau.terry@mayo.edu", role=c("aut", "cre")),
+        person("Thomas", "Lumley", role=c("ctb", "trl"),
+        comment="original S->R port and R maintainer until 2009"),
+        person("Atkinson", "Elizabeth", role="ctb"), person("Crowson",
+        "Cynthia", role="ctb"))
+Description: Contains the core survival analysis routines, including
+        definition of Surv objects, Kaplan-Meier and Aalen-Johansen
+        (multi-state) curves, Cox models, and parametric accelerated
+        failure time models.
+License: LGPL (>= 2)
+URL: https://github.com/therneau/survival
+NeedsCompilation: yes
+Packaged: 2026-01-13 02:06:39 UTC; therneau
+Author: Terry M Therneau [aut, cre], Thomas Lumley [ctb, trl] (original
+        S->R port and R maintainer until 2009), Atkinson Elizabeth
+        [ctb], Crowson Cynthia [ctb]
+Maintainer: Terry M Therneau <therneau.terry@mayo.edu>
+Repository: CRAN
+Date/Publication: 2026-01-16 09:00:02 UTC
+Built: R 4.5.1; x86_64-pc-linux-gnu; 2026-04-29 18:42:59 UTC; unix
+
+-- File: /home/menghany/R/x86_64-pc-linux-gnu-library/4.5/survival/Meta/package.rds
+
+[[2]]
+Package: glmnet
+Type: Package
+Title: Lasso and Elastic-Net Regularized Generalized Linear Models
+Version: 4.1-10
+Date: 2025-07-15
+Authors@R: c(person("Jerome", "Friedman", role=c("aut")),
+        person("Trevor", "Hastie", role=c("aut", "cre"), email =
+        "hastie@stanford.edu"), person("Rob", "Tibshirani",
+        role=c("aut")), person("Balasubramanian", "Narasimhan",
+        role=c("aut")), person("Kenneth","Tay",role=c("aut")),
+        person("Noah", "Simon", role=c("aut")), person("Junyang",
+        "Qian", role=c("ctb")), person("James", "Yang", role=c("aut")))
+Depends: R (>= 3.6.0), Matrix (>= 1.0-6)
+Imports: methods, utils, foreach, shape, survival, Rcpp
+Suggests: knitr, lars, testthat, xfun, rmarkdown
+SystemRequirements: C++17
+Description: Extremely efficient procedures for fitting the entire
+        lasso or elastic-net regularization path for linear regression,
+        logistic and multinomial regression models, Poisson regression,
+        Cox model, multiple-response Gaussian, and the grouped
+        multinomial regression; see <doi:10.18637/jss.v033.i01> and
+        <doi:10.18637/jss.v039.i05>. There are two new and important
+        additions. The family argument can be a GLM family object,
+        which opens the door to any programmed family
+        (<doi:10.18637/jss.v106.i01>). This comes with a modest
+        computational cost, so when the built-in families suffice, they
+        should be used instead.  The other novelty is the relax option,
+        which refits each of the active sets in the path unpenalized.
+        The algorithm uses cyclical coordinate descent in a path-wise
+        fashion, as described in the papers cited.
+License: GPL-2
+VignetteBuilder: knitr
+Encoding: UTF-8
+URL: https://glmnet.stanford.edu
+RoxygenNote: 7.3.2
+LinkingTo: RcppEigen, Rcpp
+NeedsCompilation: yes
+Packaged: 2025-07-16 00:40:18 UTC; hastie
+Author: Jerome Friedman [aut], Trevor Hastie [aut, cre], Rob Tibshirani
+        [aut], Balasubramanian Narasimhan [aut], Kenneth Tay [aut],
+        Noah Simon [aut], Junyang Qian [ctb], James Yang [aut]
+Maintainer: Trevor Hastie <hastie@stanford.edu>
+Repository: CRAN
+Date/Publication: 2025-07-17 04:50:02 UTC
+Built: R 4.5.1; x86_64-pc-linux-gnu; 2025-11-29 20:59:13 UTC; unix
+
+-- File: /home/menghany/R/x86_64-pc-linux-gnu-library/4.5/glmnet/Meta/package.rds
+
+[[3]]
+Package: randomForestSRC
+Version: 3.6.2
+Date: 2026-04-18
+Title: Fast Unified Random Forests for Survival, Regression, and
+        Classification (RF-SRC)
+Authors@R: c(person("Hemant", "Ishwaran", email =
+        "hemant.ishwaran@gmail.com", role = "aut"), person("Udaya B.",
+        "Kogalur", email = "ubk@kogalur.com", role = c("aut", "cre")))
+Author: Hemant Ishwaran [aut], Udaya B. Kogalur [aut, cre]
+Maintainer: Udaya B. Kogalur <ubk@kogalur.com>
+BugReports: https://github.com/kogalur/randomForestSRC/issues/
+Depends: R (>= 4.3.0),
+Imports: parallel, data.tree, DiagrammeR
+Suggests: survival, pec, prodlim, mlbench, interp, caret, cluster, fst,
+        data.table
+SystemRequirements: OpenMP
+Description: Fast OpenMP parallel computing of Breiman's random forests
+        for univariate, multivariate, unsupervised, survival, competing
+        risks, class imbalanced classification and quantile regression.
+        New Mahalanobis splitting for correlated outcomes.  Extreme
+        random forests and randomized splitting.  Suite of imputation
+        methods for missing data.  Fast random forests using
+        subsampling. Confidence regions and standard errors for
+        variable importance. New improved holdout importance.
+        Case-specific importance.  Minimal depth variable importance.
+        Visualize trees on your Safari or Google Chrome browser.
+        Anonymous random forests for data privacy.
+License: GPL (>= 3)
+URL: https://www.randomforestsrc.org/ https://ishwaran.org/
+NeedsCompilation: yes
+Packaged: 2026-04-18 12:58:13 UTC; kogalur
+Repository: CRAN
+Date/Publication: 2026-04-19 05:10:02 UTC
+Built: R 4.5.1; x86_64-pc-linux-gnu; 2026-05-17 01:12:53 UTC; unix
+
+-- File: /home/menghany/R/x86_64-pc-linux-gnu-library/4.5/randomForestSRC/Meta/package.rds
+
+[[4]]
+Package: gbm
+Version: 2.2.2
+Title: Generalized Boosted Regression Models
+Authors@R: c( person("Greg", "Ridgeway", email = "gridge@upenn.edu",
+        role = c("aut", "cre"), comment = c(ORCID =
+        "0000-0001-6911-0804")), person("Daniel", "Edwards", email =
+        "unknown@unknown.com", role = "ctb"), person("Brian",
+        "Kriegler", email = "bkriegler@econone.com", role = "ctb"),
+        person("Stefan", "Schroedl", email = "stefan@atomwise.com",
+        role = "ctb"), person("Harry", "Southworth", email =
+        "harry@dataclarityconsulting.co.uk", role = "ctb"),
+        person("Brandon", "Greenwell", email =
+        "greenwell.brandon@gmail.com", role = "ctb", comment = c(ORCID
+        = "0000-0002-8120-0084")), person("Bradley", "Boehmke", email =
+        "bradleyboehmke@gmail.com", role = "ctb", comment = c(ORCID =
+        "0000-0002-3611-8516")), person("Jay", "Cunningham", email =
+        "james@notbadafterall.com", role = "ctb"), person("GBM",
+        "Developers", role = "aut", comment =
+        "https://github.com/gbm-developers") )
+Depends: R (>= 2.9.0)
+Imports: lattice, parallel, survival
+Suggests: covr, gridExtra, knitr, pdp, RUnit, splines, tinytest, vip,
+        viridis
+Description: An implementation of extensions to Freund and Schapire's
+        AdaBoost algorithm and Friedman's gradient boosting machine.
+        Includes regression methods for least squares, absolute loss,
+        t-distribution loss, quantile regression, logistic, multinomial
+        logistic, Poisson, Cox proportional hazards partial likelihood,
+        AdaBoost exponential loss, Huberized hinge loss, and Learning
+        to Rank measures (LambdaMart). Originally developed by Greg
+        Ridgeway.  Newer version available at
+        github.com/gbm-developers/gbm3.
+License: GPL (>= 2) | file LICENSE
+URL: https://github.com/gbm-developers/gbm
+BugReports: https://github.com/gbm-developers/gbm/issues
+Encoding: UTF-8
+RoxygenNote: 7.3.1
+VignetteBuilder: knitr
+NeedsCompilation: yes
+Packaged: 2024-06-26 12:33:00 UTC; greg_
+Author: Greg Ridgeway [aut, cre]
+        (<https://orcid.org/0000-0001-6911-0804>), Daniel Edwards
+        [ctb], Brian Kriegler [ctb], Stefan Schroedl [ctb], Harry
+        Southworth [ctb], Brandon Greenwell [ctb]
+        (<https://orcid.org/0000-0002-8120-0084>), Bradley Boehmke
+        [ctb] (<https://orcid.org/0000-0002-3611-8516>), Jay Cunningham
+        [ctb], GBM Developers [aut] (https://github.com/gbm-developers)
+Maintainer: Greg Ridgeway <gridge@upenn.edu>
+Repository: CRAN
+Date/Publication: 2024-06-28 06:20:02 UTC
+Built: R 4.5.1; x86_64-pc-linux-gnu; 2025-11-29 20:51:39 UTC; unix
+
+-- File: /home/menghany/R/x86_64-pc-linux-gnu-library/4.5/gbm/Meta/package.rds
+
+[[5]]
+Package: survivalmodels
+Title: Models for Survival Analysis
+Version: 0.1.191
+Authors@R: c(person(given = "Raphael", family = "Sonabend", role =
+        c("aut"), comment = c(ORCID = "0000-0001-9225-4654")),
+        person(given = "Yohann", family = "Foucher", role = c("cre"),
+        email = "yohann.foucher@univ-poitiers.fr", comment = c(ORCID =
+        "0000-0003-0330-7457")))
+Description: Implementations of classical and machine learning models
+        for survival analysis, including deep neural networks via
+        'keras' and 'tensorflow'. Each model includes a separated fit
+        and predict interface with consistent prediction types for
+        predicting risk or survival probabilities. Models are either
+        implemented from 'Python' via 'reticulate'
+        <https://CRAN.R-project.org/package=reticulate>, from code in
+        GitHub packages, or novel implementations using 'Rcpp'
+        <https://CRAN.R-project.org/package=Rcpp>. Neural networks are
+        implemented from the 'Python' package 'pycox'
+        <https://github.com/havakv/pycox>.
+License: MIT + file LICENSE
+URL: https://github.com/RaphaelS1/survivalmodels/
+BugReports: https://github.com/foucher-y/survivalmodels/issues
+Imports: Rcpp (>= 1.0.5)
+Suggests: keras (>= 2.11.0), pseudo, reticulate, survival
+LinkingTo: Rcpp
+Encoding: UTF-8
+NeedsCompilation: yes
+Packaged: 2024-03-18 21:10:19 UTC; foucher-y
+Author: Raphael Sonabend [aut]
+        (<https://orcid.org/0000-0001-9225-4654>), Yohann Foucher [cre]
+        (<https://orcid.org/0000-0003-0330-7457>)
+Maintainer: Yohann Foucher <yohann.foucher@univ-poitiers.fr>
+Repository: CRAN
+Date/Publication: 2024-03-19 16:50:03 UTC
+Built: R 4.5.1; x86_64-pc-linux-gnu; 2026-06-02 01:00:38 UTC; unix
+
+-- File: /home/menghany/R/x86_64-pc-linux-gnu-library/4.5/survivalmodels/Meta/package.rds
+
+[[6]]
+Package: reticulate
+Type: Package
+Title: Interface to 'Python'
+Version: 1.46.0
+Authors@R: c( person("Tomasz", "Kalinowski", role = c("ctb", "cre"),
+        email = "tomasz@posit.co"), person("Kevin", "Ushey", role =
+        c("aut"), email = "kevin@posit.co"), person("JJ", "Allaire",
+        role = c("aut"), email = "jj@posit.co"), person("RStudio", role
+        = c("cph", "fnd")), person("Yuan", "Tang", role = c("aut",
+        "cph"), email = "terrytangyuan@gmail.com", comment = c(ORCID =
+        "0000-0001-5243-233X")), person("Dirk", "Eddelbuettel", role =
+        c("ctb", "cph"), email = "edd@debian.org"), person("Bryan",
+        "Lewis", role = c("ctb", "cph"), email =
+        "blewis@illposed.net"), person("Sigrid", "Keydana", role =
+        c("ctb"), email = "sigrid@posit.co"), person("Ryan", "Hafen",
+        role = c("ctb", "cph"), email = "rhafen@gmail.com"),
+        person("Marcus", "Geelnard", role = c("ctb", "cph"), comment =
+        "TinyThread library, http://tinythreadpp.bitsnbites.eu/") )
+Description: Interface to 'Python' modules, classes, and functions.
+        When calling into 'Python', R data types are automatically
+        converted to their equivalent 'Python' types. When values are
+        returned from 'Python' to R they are converted back to R types.
+        Compatible with all versions of 'Python' >= 2.7.
+License: Apache License 2.0
+URL: https://rstudio.github.io/reticulate/,
+        https://github.com/rstudio/reticulate
+BugReports: https://github.com/rstudio/reticulate/issues
+SystemRequirements: Python (>= 2.7.0)
+Encoding: UTF-8
+Depends: R (>= 3.5)
+Imports: Matrix, Rcpp (>= 1.0.7), RcppTOML, graphics, here, jsonlite,
+        methods, png, rappdirs, utils, rlang, withr
+Suggests: callr, knitr, glue, cli, rmarkdown, pillar, testthat
+LinkingTo: Rcpp
+RoxygenNote: 7.3.3
+VignetteBuilder: knitr
+Config/build/compilation-database: true
+NeedsCompilation: yes
+Packaged: 2026-04-08 00:00:29 UTC; tomasz
+Author: Tomasz Kalinowski [ctb, cre], Kevin Ushey [aut], JJ Allaire
+        [aut], RStudio [cph, fnd], Yuan Tang [aut, cph] (ORCID:
+        <https://orcid.org/0000-0001-5243-233X>), Dirk Eddelbuettel
+        [ctb, cph], Bryan Lewis [ctb, cph], Sigrid Keydana [ctb], Ryan
+        Hafen [ctb, cph], Marcus Geelnard [ctb, cph] (TinyThread
+        library, http://tinythreadpp.bitsnbites.eu/)
+Maintainer: Tomasz Kalinowski <tomasz@posit.co>
+Repository: CRAN
+Date/Publication: 2026-04-09 11:50:02 UTC
+Built: R 4.5.1; x86_64-pc-linux-gnu; 2026-06-02 01:00:47 UTC; unix
+
+-- File: /home/menghany/R/x86_64-pc-linux-gnu-library/4.5/reticulate/Meta/package.rds

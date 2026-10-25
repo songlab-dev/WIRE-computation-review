@@ -1,0 +1,11 @@
+{
+  "common.py": "identical calculation AST after removing interpreter-path lookup",
+  "prepare.py": "identical calculation AST after removing interpreter-path lookup",
+  "fit_python.py": "identical calculation AST after removing interpreter-path lookup",
+  "run_task.py": "identical calculation AST after removing interpreter-path lookup",
+  "config.json": "all experiment settings identical",
+  "frozen_releases": {
+    "v1": "8e9cf0f44fcad799209d502177ff0b4c342a680fda5e5367b770c33f147478b5",
+    "v2": "fd1a34ce62c073a8e650709cac10dfc534b6d643b98e2d7b1707ad5b5da16b16"
+  }
+}

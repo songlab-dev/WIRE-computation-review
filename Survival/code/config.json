@@ -1,0 +1,112 @@
+{
+  "protocol": "survival-revision-20261024-v2",
+  "settings": [
+    {
+      "name": "highdim",
+      "p": 500
+    },
+    {
+      "name": "nonlinear",
+      "p": 50
+    }
+  ],
+  "sample_sizes": [
+    500,
+    1000,
+    1500
+  ],
+  "replications": 100,
+  "data_seed_start": 20226091,
+  "training_seeds": [
+    2026091,
+    2026092,
+    2026093,
+    2026094,
+    2026095
+  ],
+  "split": [
+    0.6,
+    0.2,
+    0.2
+  ],
+  "rho": 0.3,
+  "weibull_shape": 1.5,
+  "weibull_scale_coefficient": 0.1,
+  "censoring_target": 0.3,
+  "calibration_n": 50000,
+  "calibration_seeds": {
+    "highdim": 20226089,
+    "nonlinear": 20226090
+  },
+  "compute_threads": 1,
+  "rsf": {
+    "trees": 200,
+    "r_nodesize": 15,
+    "py_min_samples_split": 30,
+    "py_min_samples_leaf": 1
+  },
+  "boosting": {
+    "trees": 300,
+    "learning_rate": 0.05,
+    "max_splits": 3,
+    "max_depth": 3,
+    "max_leaf_nodes": 4,
+    "min_leaf": 15,
+    "sample_fraction": 1.0
+  },
+  "coxnet": {
+    "penalties": 100,
+    "min_ratio": 0.01,
+    "tolerance": 1e-07,
+    "max_iterations": 1000000
+  },
+  "deepsurv": {
+    "nodes": [
+      32
+    ],
+    "learning_rate": 0.001,
+    "batch_size": 150,
+    "epochs": 150,
+    "patience": 20,
+    "dropout": 0.0,
+    "batch_norm": false,
+    "output_bias": false
+  },
+  "metrics": {
+    "grid_points": 100,
+    "train_time_quantiles": [
+      0.1,
+      0.9
+    ],
+    "cindex_tied_tol": 1e-08,
+    "risk": "negative normalized integral of predicted survival over the common IBS grid",
+    "rss_unit_raw": "KiB",
+    "rss_unit_reported": "MiB"
+  },
+  "python": "~/.conda/envs/surv_py/bin/python",
+  "deep_python": "~/.conda/envs/deepsurv_env/bin/python",
+  "required_python_versions": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scipy": "1.15.2",
+    "scikit-learn": "1.7.2",
+    "scikit-survival": "0.25.0",
+    "lifelines": "0.30.0"
+  },
+  "required_deep_versions": {
+    "numpy": "1.20.3",
+    "pandas": "1.5.3",
+    "torch": "2.8.0",
+    "pycox": "0.3.0",
+    "torchtuples": "0.2.2"
+  },
+  "required_r_versions": {
+    "survival": "3.8.6",
+    "glmnet": "4.1.10",
+    "randomForestSRC": "3.6.2",
+    "gbm": "2.2.2",
+    "survivalmodels": "0.1.191",
+    "reticulate": "1.46.0",
+    "jsonlite": "2.0.0"
+  }
+}

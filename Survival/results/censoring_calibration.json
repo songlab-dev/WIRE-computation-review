@@ -1,0 +1,14 @@
+{
+  "highdim": {
+    "uniform_upper": 16.051362700299904,
+    "seed": 20226089,
+    "n": 50000,
+    "expected_rate_on_calibration_sample": 0.3000000000000001
+  },
+  "nonlinear": {
+    "uniform_upper": 16.11133936556685,
+    "seed": 20226090,
+    "n": 50000,
+    "expected_rate_on_calibration_sample": 0.3000000000000001
+  }
+}

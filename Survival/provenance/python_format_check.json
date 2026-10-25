@@ -1,0 +1,14 @@
+{
+  "verify_summary.py": "identical AST after formatting",
+  "native_checks.py": "identical AST after formatting",
+  "submit.py": "identical AST after formatting",
+  "verify_data.py": "identical AST after formatting",
+  "validate_pilot.py": "identical AST after formatting",
+  "run_task.py": "identical AST after formatting",
+  "final_audit.py": "identical AST after formatting",
+  "common.py": "identical AST after formatting",
+  "summarize.py": "identical AST after formatting",
+  "fit_python.py": "identical AST after formatting",
+  "prepare.py": "identical AST after formatting",
+  "collect_slurm.py": "identical AST after formatting"
+}

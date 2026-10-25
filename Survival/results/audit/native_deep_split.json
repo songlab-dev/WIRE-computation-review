@@ -1,0 +1,6 @@
+{
+  "exact_ordered_training": true,
+  "exact_ordered_validation": true,
+  "n_train": 300,
+  "n_val": 100
+}
