@@ -1,0 +1,7 @@
+{
+  "R": "4.5.1",
+  "randomForestSRC": "3.6.2",
+  "parent_42_child_sizes": [1, 41],
+  "weighted_30_draws_15_unique_leaves": 2,
+  "conclusion": "R nodesize constrains bootstrap draw counts in the parent; children can have fewer than nodesize observations."
+}

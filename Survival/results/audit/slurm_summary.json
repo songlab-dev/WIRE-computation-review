@@ -1,0 +1,8 @@
+{
+  "scheduler_rows": 15272,
+  "all_noncompletion_records": 3,
+  "superseded_scheduler_records": 230,
+  "active_formal_noncompletion_records": 1,
+  "active_formal_completed_jobs": 4800,
+  "max_average_cpu_cores_used": 0.9948006814310051
+}

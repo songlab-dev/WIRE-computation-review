@@ -1,0 +1,52 @@
+[
+  {
+    "nonempty_leaves": 4,
+    "min_nonempty_leaf_weight": 32,
+    "splits": 3
+  },
+  {
+    "nonempty_leaves": 4,
+    "min_nonempty_leaf_weight": 28,
+    "splits": 3
+  },
+  {
+    "nonempty_leaves": 4,
+    "min_nonempty_leaf_weight": 16,
+    "splits": 3
+  },
+  {
+    "nonempty_leaves": 4,
+    "min_nonempty_leaf_weight": 20,
+    "splits": 3
+  },
+  {
+    "nonempty_leaves": 4,
+    "min_nonempty_leaf_weight": 16,
+    "splits": 3
+  },
+  {
+    "nonempty_leaves": 4,
+    "min_nonempty_leaf_weight": 25,
+    "splits": 3
+  },
+  {
+    "nonempty_leaves": 4,
+    "min_nonempty_leaf_weight": 16,
+    "splits": 3
+  },
+  {
+    "nonempty_leaves": 4,
+    "min_nonempty_leaf_weight": 15,
+    "splits": 3
+  },
+  {
+    "nonempty_leaves": 4,
+    "min_nonempty_leaf_weight": 35,
+    "splits": 3
+  },
+  {
+    "nonempty_leaves": 4,
+    "min_nonempty_leaf_weight": 25,
+    "splits": 3
+  }
+]

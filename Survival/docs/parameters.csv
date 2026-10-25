@@ -1,0 +1,45 @@
+Model,Parameter,R,Python,Alignment and provenance,Note
+All,Training observations,Saved 60% training split,Same saved training split,Explicit; aligned,DeepSurv native R split is replayed from saved indices.
+All,Validation/test,Saved 20% validation / 20% test,Same ordered observations,Explicit; aligned,No model-specific test filtering.
+All,Training seed,2026091–2026095 cyclic by replication,Same seed number,Explicit; aligned protocol,Different RNG algorithms need not produce the same stream.
+All,CPU,Intel Xeon Gold 6154; 4 cores allocated,Same processor and allocation,Explicit; enforced,Nonmatching processors fail before fitting.
+All,Computation threads,BLAS/OpenMP=1; rf.cores=1; gbm n.cores=1; torch=1,BLAS/OpenMP=1; RSF n_jobs=1; torch=1,Explicit; aligned,Auxiliary operating-system threads may exist; computational thread pools are limited.
+Cox PH,Package/function,survival 3.8-6 / coxph,lifelines 0.30.0 / CoxPHFitter,Version pinned,Nonlinear setting only.
+Cox PH,Coefficient ties,ties=efron,Efron in native semiparametric fitter,R explicit; Python fixed native behavior; aligned,baseline_estimation_method=breslow is not a coefficient-ties setting.
+Cox PH,Baseline hazard,Native Efron-adjusted baseline,Native Breslow baseline,Remaining native difference,Continuous generated event times make ties uncommon.
+Penalized Cox,Package/function,glmnet 4.1-10 / glmnet,scikit-survival 0.25.0 / CoxnetSurvivalAnalysis,Version pinned,High-dimensional setting only.
+Penalized Cox,Penalty,alpha=1,l1_ratio=1,Explicit; aligned L1,These two differently named parameters both select pure L1 regularization.
+Penalized Cox,Scaling,Shared training mean/SD; standardize=FALSE,Same mean/SD; normalize=False,Explicit; aligned,Population SD (ddof=0); no validation/test information used.
+Penalized Cox,Path,100 explicit penalties: lambda_max to 0.01 lambda_max,Identical explicit penalty vector,Explicit; aligned candidates,Python native path truncation is completed by native single-alpha fits if required; all selection work is timed.
+Penalized Cox,Selection,Maximum validation-only Breslow partial log likelihood,Same grouped-risk-set definition,Explicit; aligned,First/strongest penalty wins exact objective ties.
+Penalized Cox,Convergence,thresh=1e-7; maxit=1000000,tol=1e-7; max_iter=1000000,Explicit; native criteria differ,Matching numerical arguments do not make stopping tests mathematically identical.
+Penalized Cox,Baseline,Training-only common Breslow estimator,Same estimator,Explicit; aligned,Selected coefficients used without refitting on validation data.
+RSF,Package/function,randomForestSRC 3.6.2 / rfsrc,scikit-survival 0.25.0 / RandomSurvivalForest,Version pinned,Both settings.
+RSF,Trees,ntree=200,n_estimators=200,Explicit; aligned,
+RSF,Candidate features,mtry=floor(sqrt(p)),max_features=int(sqrt(p)),Explicit; aligned,22 for p=500; 7 for p=50.
+RSF,Split criterion,splitrule=logrank,Native log-rank criterion,R explicit; Python fixed native behavior; aligned,
+RSF,Bootstrap,bootstrap=by.root; samptype=swr; sampsize=n_train,bootstrap=True; max_samples=n_train,Explicit; aligned,"Uniform sampling with replacement, n_train draws per tree."
+RSF,Cut-point search,nsplit=0,Native best splitter,R explicit; Python default; closest available,Both search valid cut points exhaustively; threshold conventions and floating-point representations remain native.
+RSF,Node stopping,nodesize=15: parent has at least 30 bootstrap draws,min_samples_split=30; min_samples_leaf=1,Explicit; closer but not equivalent,R counts repeated draws; Python counts unique positive-weight observations. Verified on native fixtures.
+RSF,Prediction time points,ntime=all unique training event times,Native full training-time set,R explicit; Python native; aligned evaluation grid,All predictions are subsequently evaluated on the common 100-point grid.
+RSF,Training diagnostics,perf.type=none; importance=FALSE; native in-bag/OOB ensembles retained,Native oob_score=False default,Remaining native overhead,R 3.6.2 hard-codes ensemble=all under bootstrapping; no package internals modified.
+Boosting,Package/function,gbm 2.2.2 / gbm,scikit-survival 0.25.0 / GradientBoostingSurvivalAnalysis,Version pinned,Both settings.
+Boosting,Loss,distribution=coxph,loss=coxph,Explicit; aligned objective family,Native leaf-value updates differ.
+Boosting,Sample fraction,bag.fraction=1; train.fraction=1,subsample=1,Explicit; aligned,All training observations are used each iteration.
+Boosting,Trees/learning rate,n.trees=300; shrinkage=0.05,n_estimators=300; learning_rate=0.05,Explicit; aligned,No cross-validation or early stopping.
+Boosting,Tree size,interaction.depth=3 (at most 3 splits),max_depth=3; max_leaf_nodes=4,Explicit; aligned ordinary-tree size cap,gbm also creates unused missing-value fallback branches.
+Boosting,Minimum node size,n.minobsinnode=15,min_samples_leaf=15; min_samples_split=30,Explicit; aligned child-size constraint,At least 15 observations in each ordinary child.
+Boosting,Leaf values,Native Cox Hessian/Newton leaf update,Native least-squares fit to negative gradient,Remaining native algorithm difference,Not changed to force identical results.
+Boosting,Baseline,Training-only common Breslow estimator,Same estimator,Explicit; aligned,Python also computes its native baseline internally; retained native fitting cost.
+DeepSurv,Package/function,survivalmodels 0.1.191 / deepsurv,pycox 0.3.0 / CoxPH,Version pinned,R uses reticulate 1.46.0 and the same Python backend.
+DeepSurv,Network,One 32-unit ReLU layer; output_bias=FALSE fixed internally,One 32-unit ReLU layer; output_bias=False,R native fixed bias; other settings explicit; aligned,dropout=0; batch_norm=False on both sides.
+DeepSurv,Optimizer,get_pycox_optim produces torch.optim.Adam,torch.optim.Adam,Explicit; aligned,"lr=.001, betas=(.9,.999), eps=1e-8, weight_decay=0, amsgrad=False."
+DeepSurv,Training,batch_size=150; epochs=150; shuffle=TRUE; num_workers=0,Same settings,Explicit; aligned,CPU only; PyTorch deterministic algorithms enabled. Batch size 150 divides all training sizes and avoids a 4-observation remainder at n=1500; all training logs must be finite.
+DeepSurv,Early stopping,"Native torchtuples EarlyStopping, patience=20, min_delta=0",Same callback/settings,Explicit patience/delta; native load_best=True default; aligned,"Validation loss, best checkpoint restored, checkpoint removed after training."
+DeepSurv,Validation,"Native frac=.25 on saved 80% pool, seeded native sample",Saved ordered validation sample,Explicit; verified aligned,R-native split helper and actual model training_data are checked.
+DeepSurv,Randomness,"R seed plus Python random, NumPy and PyTorch seeds","Python random, NumPy and PyTorch seeds",Explicit; aligned seed numbers,R/Python use the same pycox/torch environment.
+DeepSurv,Baseline,Native pycox compute_baseline_hazards() on actual training_data,Same call,Explicit; aligned,Validation observations never enter baseline estimation.
+Evaluation,IBS,Central Python evaluation,Central Python evaluation,Identical,IPCW from training censoring KM; 100-point training 10–90% grid; full test set.
+Evaluation,C-index,Central Harrell C-index,Same function and risk score,Identical,Risk is negative integrated survival on common grid; tied_tol=1e-8.
+Measurement,Time,Elapsed fitting wall time,perf_counter fitting wall time,Aligned scope,Includes preprocessing/selection/training/baseline; excludes loading/test prediction/evaluation.
+Measurement,Peak RSS,Linux process VmHWM after fit,Same Linux field and boundary,Identical definition,"Includes startup/import/loading; KiB raw, MiB reported. R embedded Python is in the same PID."

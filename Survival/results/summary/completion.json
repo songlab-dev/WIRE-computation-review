@@ -1,0 +1,14 @@
+{
+  "expected": 4800,
+  "success": 4800,
+  "failed_or_missing": 0,
+  "failed_attempts": 1,
+  "tasks_with_failed_attempts": 1,
+  "code_releases": {
+    "CoxPH": "8e9cf0f44fcad799209d502177ff0b4c342a680fda5e5367b770c33f147478b5",
+    "Coxnet": "8e9cf0f44fcad799209d502177ff0b4c342a680fda5e5367b770c33f147478b5",
+    "RSF": "8e9cf0f44fcad799209d502177ff0b4c342a680fda5e5367b770c33f147478b5",
+    "Boosting": "8e9cf0f44fcad799209d502177ff0b4c342a680fda5e5367b770c33f147478b5",
+    "DeepSurv": "fd1a34ce62c073a8e650709cac10dfc534b6d643b98e2d7b1707ad5b5da16b16"
+  }
+}

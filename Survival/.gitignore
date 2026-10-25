@@ -1,8 +1,5 @@
-.DS_Store
 __pycache__/
-*.py[cod]
-.RData
-.Rhistory
-.venv*/
-logs/
+*.pyc
+code/logs/
 outputs/
+settings.local.sh

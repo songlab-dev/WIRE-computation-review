@@ -1,0 +1,35 @@
+\begin{table}[htbp]
+\centering
+\small
+\caption{Survival simulation results at $n=1500$. Values are mean (SD) over 100 independent datasets; memory is peak resident set size (RSS).}
+\label{tab:survival_simulation_results_n1500}
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.1}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{llrrrr}
+\toprule
+Model & Implementation & IBS & C-index & Time (s) & Peak RSS (MiB) \\
+\midrule
+\multicolumn{6}{l}{\textit{High-dimensional sparse Cox}}\\
+Penalized Cox & glmnet (R) & 0.165 (0.010) & 0.694 (0.022) & 1.05 (0.07) & 265.3 (0.2) \\
+ & scikit-survival (Python) & 0.165 (0.010) & 0.694 (0.022) & 0.50 (0.04) & 154.7 (0.3) \\
+RSF & randomForestSRC (R) & 0.209 (0.011) & 0.537 (0.024) & 196.95 (17.11) & 1666.2 (62.1) \\
+ & scikit-survival (Python) & 0.207 (0.011) & 0.535 (0.027) & 563.77 (33.34) & 1288.4 (24.5) \\
+Boosting & gbm (R) & 0.193 (0.012) & 0.626 (0.023) & 5.00 (0.31) & 255.5 (2.2) \\
+ & scikit-survival (Python) & 0.191 (0.012) & 0.626 (0.023) & 42.33 (0.60) & 148.4 (0.3) \\
+DeepSurv & survivalmodels (R) & 0.211 (0.012) & 0.542 (0.024) & 2.03 (0.11) & 1071.2 (5.1) \\
+ & pycox (Python) & 0.211 (0.012) & 0.542 (0.024) & 1.64 (0.31) & 797.3 (3.3) \\
+\midrule
+\multicolumn{6}{l}{\textit{Smooth nonlinear survival}}\\
+Cox PH & survival (R) & 0.191 (0.011) & 0.620 (0.022) & 0.11 (0.00) & 180.1 (0.3) \\
+ & lifelines (Python) & 0.191 (0.011) & 0.620 (0.022) & 0.19 (0.01) & 128.6 (0.2) \\
+RSF & randomForestSRC (R) & 0.180 (0.010) & 0.667 (0.020) & 17.15 (1.47) & 1277.7 (46.7) \\
+ & scikit-survival (Python) & 0.179 (0.010) & 0.668 (0.020) & 47.57 (3.08) & 653.9 (12.4) \\
+Boosting & gbm (R) & 0.169 (0.010) & 0.699 (0.020) & 0.53 (0.01) & 195.5 (0.4) \\
+ & scikit-survival (Python) & 0.166 (0.010) & 0.702 (0.020) & 7.07 (0.07) & 137.4 (0.3) \\
+DeepSurv & survivalmodels (R) & 0.195 (0.011) & 0.606 (0.024) & 1.68 (0.09) & 1022.3 (0.9) \\
+ & pycox (Python) & 0.195 (0.011) & 0.606 (0.024) & 1.64 (0.10) & 787.8 (1.1) \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

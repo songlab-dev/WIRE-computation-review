@@ -7,8 +7,7 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
 required_versions <- c(
   survival = "3.8-6",
   glmnet = "4.1-10",
-  dplyr = "1.2.1",
-  readr = "2.1.5",
+  jsonlite = "2.0.0",
   randomForestSRC = "3.6.2",
   gbm = "2.2.2",
   survivalmodels = "0.1.191",

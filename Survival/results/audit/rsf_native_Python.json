@@ -1,0 +1,12 @@
+{
+  "new_child_sizes": [
+    1,
+    41
+  ],
+  "old_child_sizes": [
+    15,
+    27
+  ],
+  "weighted_30_draws_15_unique_leaves": 1,
+  "conclusion": "Python counts unique positive-weight observations for min_samples_split; it is not identical to R bootstrap draw-count stopping."
+}

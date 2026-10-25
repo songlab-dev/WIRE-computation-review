@@ -1,0 +1,163 @@
+{
+  "publication_code_sha256": "3c75ec4a2086b1677f4b7aa521906189d25e73136de22c47365d4037baf6df61",
+  "unchanged_experiment_settings": true,
+  "python_calculation_ast_unchanged_except_path_resolution": true,
+  "r_fitting_and_split_expressions_unchanged": true,
+  "frozen_sources_hash_verified": true,
+  "smoke_fits": 20,
+  "smoke_failures": 0,
+  "native_checks_passed": true,
+  "predictions_and_metrics_match_original_to_absolute_tolerance": 1e-12,
+  "max_abs_prediction_difference": 0.0,
+  "deep_inputs_and_logs_match_exactly": true,
+  "independently_verified_summary_values": 384,
+  "latex_tables_match_saved_results": true,
+  "dataset_and_task_manifests_unchanged": true,
+  "original_time_and_memory_retained": true,
+  "slurm_jobs": [
+    "64750544",
+    "64750545"
+  ],
+  "fits": [
+    {
+      "task_id": 0,
+      "model": "Coxnet",
+      "language": "R",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 1,
+      "model": "Coxnet",
+      "language": "Python",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 2,
+      "model": "RSF",
+      "language": "R",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 3,
+      "model": "RSF",
+      "language": "Python",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 4,
+      "model": "Boosting",
+      "language": "R",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 5,
+      "model": "Boosting",
+      "language": "Python",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 6,
+      "model": "DeepSurv",
+      "language": "R",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 7,
+      "model": "DeepSurv",
+      "language": "Python",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 1614,
+      "model": "DeepSurv",
+      "language": "R",
+      "n": 1500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 1615,
+      "model": "DeepSurv",
+      "language": "Python",
+      "n": 1500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 2400,
+      "model": "CoxPH",
+      "language": "R",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 2401,
+      "model": "CoxPH",
+      "language": "Python",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 2402,
+      "model": "RSF",
+      "language": "R",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 2403,
+      "model": "RSF",
+      "language": "Python",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 2404,
+      "model": "Boosting",
+      "language": "R",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 2405,
+      "model": "Boosting",
+      "language": "Python",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 2406,
+      "model": "DeepSurv",
+      "language": "R",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 2407,
+      "model": "DeepSurv",
+      "language": "Python",
+      "n": 500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 4014,
+      "model": "DeepSurv",
+      "language": "R",
+      "n": 1500,
+      "max_abs_prediction_difference": 0.0
+    },
+    {
+      "task_id": 4015,
+      "model": "DeepSurv",
+      "language": "Python",
+      "n": 1500,
+      "max_abs_prediction_difference": 0.0
+    }
+  ]
+}

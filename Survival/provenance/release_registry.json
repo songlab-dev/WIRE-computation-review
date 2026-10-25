@@ -1,0 +1,36 @@
+{
+  "protocol": "Final protocol with DeepSurv batch size 150 at all sample sizes",
+  "models": {
+    "CoxPH": {
+      "code_dir": "/home/menghany/WRIES/survival_revision_release_8e9cf0f44fca",
+      "code_sha256": "8e9cf0f44fcad799209d502177ff0b4c342a680fda5e5367b770c33f147478b5",
+      "result_root": "/scratch/pxsong_root/pxsong1/menghany/survival_revision_20261024"
+    },
+    "Coxnet": {
+      "code_dir": "/home/menghany/WRIES/survival_revision_release_8e9cf0f44fca",
+      "code_sha256": "8e9cf0f44fcad799209d502177ff0b4c342a680fda5e5367b770c33f147478b5",
+      "result_root": "/scratch/pxsong_root/pxsong1/menghany/survival_revision_20261024"
+    },
+    "RSF": {
+      "code_dir": "/home/menghany/WRIES/survival_revision_release_8e9cf0f44fca",
+      "code_sha256": "8e9cf0f44fcad799209d502177ff0b4c342a680fda5e5367b770c33f147478b5",
+      "result_root": "/scratch/pxsong_root/pxsong1/menghany/survival_revision_20261024"
+    },
+    "Boosting": {
+      "code_dir": "/home/menghany/WRIES/survival_revision_release_8e9cf0f44fca",
+      "code_sha256": "8e9cf0f44fcad799209d502177ff0b4c342a680fda5e5367b770c33f147478b5",
+      "result_root": "/scratch/pxsong_root/pxsong1/menghany/survival_revision_20261024"
+    },
+    "DeepSurv": {
+      "code_dir": "/home/menghany/WRIES/survival_revision_release_fd1a34ce62c0",
+      "code_sha256": "fd1a34ce62c073a8e650709cac10dfc534b6d643b98e2d7b1707ad5b5da16b16",
+      "result_root": "/scratch/pxsong_root/pxsong1/menghany/survival_revision_20261024/deep_v2"
+    }
+  },
+  "data_unchanged": true,
+  "configuration_changes_verified": [
+    "DeepSurv batch_size 128 -> 150",
+    "Non-finite training logs now invalidate a fit"
+  ],
+  "superseded_model": "DeepSurv in the original result root"
+}
