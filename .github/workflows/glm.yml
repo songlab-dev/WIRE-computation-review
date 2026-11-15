@@ -1,0 +1,33 @@
+name: GLM protocol and tables
+
+on:
+  push:
+    paths: ['GLM/**', '.github/workflows/glm.yml']
+  pull_request:
+    paths: ['GLM/**', '.github/workflows/glm.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  controls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: GLM/requirements-checks.txt
+      - run: python -m pip install -r GLM/requirements-checks.txt
+      - name: Check shell syntax
+        run: |
+          for script in GLM/*.sh GLM/slurm/*.sh GLM/slurm/*.sbatch; do
+            bash -n "$script"
+          done
+      - name: Protocol, Slurm controls and table export
+        working-directory: GLM
+        run: |
+          python test_protocol.py
+          python -m unittest test_slurm test_slurm_cpu_relaxed test_cv_merge_policy test_merge_diagnostics test_node_selection test_collect_slurm_audit test_export_tables
