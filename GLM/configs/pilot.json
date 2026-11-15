@@ -1,0 +1,111 @@
+{
+  "profile": "pilot",
+  "timing_seeds": [
+    2026091
+  ],
+  "timing_repeats": 1,
+  "statistical_replicates": 1,
+  "accuracy_seed": 20261009,
+  "test_n": 2000,
+  "cv_folds": 5,
+  "lambda_count": 100,
+  "lambda_min_ratio": 0.01,
+  "max_iter": 1000,
+  "solver_tol": 1e-08,
+  "glmnet_thresh": 1e-12,
+  "kkt_tol": 1e-05,
+  "support_tol": 1e-08,
+  "memory_poll_seconds": 0.005,
+  "task_timeout_seconds": 86400,
+  "chunk_size": 5000,
+  "keep_data": false,
+  "unpenalized_methods": [
+    "R_stats",
+    "R_fastglm",
+    "R_speedglm",
+    "R_biglm",
+    "Py_statsmodels",
+    "Py_sklearn",
+    "Py_glum",
+    "Py_spglm"
+  ],
+  "penalized_methods": [
+    "R_glmnet",
+    "Py_glum_lasso",
+    "Py_skglm"
+  ],
+  "scenarios": [
+    {
+      "id": "D1",
+      "regime": "dense",
+      "n": 2000,
+      "p": 200
+    },
+    {
+      "id": "D2",
+      "regime": "dense",
+      "n": 10000,
+      "p": 500
+    },
+    {
+      "id": "D3",
+      "regime": "dense",
+      "n": 30000,
+      "p": 500
+    },
+    {
+      "id": "S1",
+      "regime": "sparse",
+      "n": 10000,
+      "p": 500,
+      "density": 0.01
+    },
+    {
+      "id": "S2",
+      "regime": "sparse",
+      "n": 30000,
+      "p": 500,
+      "density": 0.01
+    },
+    {
+      "id": "S3",
+      "regime": "sparse",
+      "n": 10000,
+      "p": 500,
+      "density": 0.05
+    },
+    {
+      "id": "S4",
+      "regime": "sparse",
+      "n": 30000,
+      "p": 500,
+      "density": 0.05
+    },
+    {
+      "id": "H1",
+      "regime": "highdim",
+      "n": 300,
+      "p": 1000
+    },
+    {
+      "id": "H2",
+      "regime": "highdim",
+      "n": 500,
+      "p": 500
+    },
+    {
+      "id": "SH1",
+      "regime": "sparse_highdim",
+      "n": 300,
+      "p": 1000,
+      "density": 0.01
+    },
+    {
+      "id": "SH2",
+      "regime": "sparse_highdim",
+      "n": 500,
+      "p": 500,
+      "density": 0.01
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+package,version
+Matrix,1.7.0
+jsonlite,2.0.0
+glmnet,5.1
+fastglm,0.1.2
+speedglm,0.3.5
+biglm,0.9.3

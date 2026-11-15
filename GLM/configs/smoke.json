@@ -1,0 +1,16 @@
+{
+  "profile":"smoke", "timing_seeds":[2026091], "timing_repeats":2,
+  "statistical_replicates":1, "accuracy_seed":20261009, "test_n":200,
+  "cv_folds":5, "lambda_count":8, "lambda_min_ratio":0.01,
+  "max_iter":1000, "solver_tol":1e-8, "glmnet_thresh":1e-12,
+  "kkt_tol":1e-5, "support_tol":1e-8, "memory_poll_seconds":0.005,
+  "task_timeout_seconds":600, "chunk_size":100, "keep_data":true,
+  "unpenalized_methods":["R_stats","R_fastglm","R_speedglm","R_biglm","Py_statsmodels","Py_sklearn","Py_glum","Py_spglm"],
+  "penalized_methods":["R_glmnet","Py_glum_lasso","Py_skglm"],
+  "scenarios":[
+    {"id":"D-smoke","regime":"dense","n":240,"p":12},
+    {"id":"S-smoke","regime":"sparse","n":300,"p":12,"density":0.2},
+    {"id":"H-smoke","regime":"highdim","n":100,"p":180},
+    {"id":"SH-smoke","regime":"sparse_highdim","n":100,"p":180,"density":0.2}
+  ]
+}

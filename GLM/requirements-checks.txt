@@ -1,0 +1,6 @@
+# Protocol/controller/table checks only; no solver packages or R required.
+numpy==2.3.5
+scipy==1.17.0
+pandas==3.0.6
+psutil==7.2.2
+threadpoolctl==3.6.0

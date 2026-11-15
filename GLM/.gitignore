@@ -1,0 +1,42 @@
+# Local environments and installation logs
+.venv/
+.venv-glm/
+.venv-checks/
+.R-library/
+__pycache__/
+*.py[cod]
+R_packages_installed.csv
+requirements-installed.txt
+.Rhistory
+.RData
+
+# Site-specific billing/module configuration
+slurm/site_config.sh
+slurm/setup-logs/
+
+# New experiments and temporary author artifacts
+results/
+data_glm/
+paper_tables/
+revision/
+replacement_backups/
+build_revision.py
+finalize_from_tables.py
+revision_materials.py
+test_revision_materials.py
+IGNORE_CPU_README_CN.md
+results_R.csv
+results_python.csv
+results_all_raw.csv
+results_all_summary.csv
+*.out
+*.err
+*.log
+*.aux
+*.pdf
+*.tar.gz
+*.zip
+
+# Experimental outputs from an earlier release remain local.
+reference_results/
+RELEASE.json
